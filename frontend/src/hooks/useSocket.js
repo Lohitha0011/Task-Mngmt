@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react"
 import { io } from "socket.io-client"
+import { SOCKET_URL } from "../config/api"
 
-const useSocket = (serverPath = "http://localhost:5000") => {
+const useSocket = (serverPath = SOCKET_URL) => {
   const socketRef = useRef(null)
 
   useEffect(() => {
