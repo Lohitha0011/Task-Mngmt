@@ -33,7 +33,9 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:3000"], // Vite + CRA
+    origin: process.env.NODE_ENV === 'production' 
+      ? [process.env.FRONTEND_URL] 
+      : ["http://localhost:5173", "http://localhost:3000"],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -42,7 +44,9 @@ const io = new Server(server, {
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: process.env.NODE_ENV === 'production' 
+      ? [process.env.FRONTEND_URL] 
+      : ["http://localhost:5173", "http://localhost:3000"],
     credentials: true,
   })
 );
