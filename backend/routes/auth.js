@@ -18,6 +18,14 @@ router.post(
   ],
   async (req, res) => {
     try {
+      // Check if database is connected
+      if (!process.env.MONGODB_URI) {
+        return res.status(503).json({
+          success: false,
+          message: "Database not configured. Please set MONGODB_URI environment variable.",
+        })
+      }
+
       // Check for validation errors
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
@@ -67,6 +75,7 @@ router.post(
       res.status(500).json({
         success: false,
         message: "Server error during registration",
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
       })
     }
   },

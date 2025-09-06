@@ -80,7 +80,18 @@ app.get("/api/health", (req, res) => {
     message: "✅ DNX Dashboard API is running!", 
     status: "healthy",
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    mongodb_connected: !!process.env.MONGODB_URI
+  });
+});
+
+// Test endpoint that doesn't require database
+app.post("/api/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Test endpoint working",
+    timestamp: new Date().toISOString(),
+    body: req.body
   });
 });
 
