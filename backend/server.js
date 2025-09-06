@@ -22,11 +22,15 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 // Debug log
 if (!process.env.MONGODB_URI) {
   console.error("❌ MONGODB_URI is missing. Check your .env file!");
-  process.exit(1);
+  console.log("Available environment variables:", Object.keys(process.env));
+  // Don't exit in production, just log the error
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
+} else {
+  // Connect to database only if MONGODB_URI is available
+  connectDB();
 }
-
-// Connect to database
-connectDB();
 
 const app = express();
 const server = createServer(app);
@@ -61,8 +65,23 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/messages", messageRoutes);
 
 
+// Root route
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "✅ DNX Dashboard API is running!", 
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 app.get("/api/health", (req, res) => {
-  res.json({ message: "✅ DNX Dashboard API is running!" });
+  res.json({ 
+    message: "✅ DNX Dashboard API is running!", 
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 io.on("connection", (socket) => {
