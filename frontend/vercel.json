@@ -2,5 +2,11 @@
   "env": {
     "VITE_API_URL": "https://task-mngmt-2.onrender.com",
     "VITE_SOCKET_URL": "https://task-mngmt-2.onrender.com"
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
